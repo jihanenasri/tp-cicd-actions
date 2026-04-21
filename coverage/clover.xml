@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776780274329" clover="3.2.0">
-  <project timestamp="1776780274329" name="All files">
+<coverage generated="1776784158305" clover="3.2.0">
+  <project timestamp="1776784158305" name="All files">
     <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3" elements="13" coveredelements="13" complexity="0" loc="6" ncloc="6" packages="1" files="1" classes="1"/>
     <file name="math.js" path="C:\Users\nasji\OneDrive\Documents\S6\GL\projetCICD\tp-cicd-actions\src\math.js">
       <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
