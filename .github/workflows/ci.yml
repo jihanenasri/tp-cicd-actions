@@ -4,10 +4,18 @@ on:
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]
   workflow_call:
+
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+
+    timeout-minutes: 10
+
+    concurrency:
+      group: ci-${{ github.ref }}
+      cancel-in-progress: true
 
     strategy:
       matrix:
@@ -39,3 +47,14 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 7
+
+      - name: Notifier Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": "CI ${{ job.status }} sur ${{ github.ref }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
