@@ -1,28 +1,31 @@
 name: CI - Build & Test
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_call:
+    secrets: # Permettre à d'autres workflows d'appeler celui-ci et de lui passer des secrets
+      SLACK_WEBHOOK:
+        required: false
   schedule:
     - cron: '0 2 * * *' # Tous les jours à 02h00 UTC
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   lint-and-test:
-    runs-on: ubuntu-latest
-
-    timeout-minutes: 10
-
+    env: 
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     concurrency:
-      group: ci-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}-${{ matrix.node-version }}
       cancel-in-progress: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       matrix:
         node-version: [18, 20, 22]
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -42,10 +45,6 @@ jobs:
       - name: Lancer les tests avec couverture
         run: npm test
 
-      # 🔴 DEBUG SLACK (TEMPORAIRE)
-      - name: Debug Slack secret
-        run: echo "${{ secrets.SLACK_WEBHOOK }}"
-
       - name: Upload du rapport de couverture
         if: matrix.node-version == 22
         uses: actions/upload-artifact@v4
@@ -55,7 +54,7 @@ jobs:
           retention-days: 7
 
       - name: Notifier Slack
-        if: always()
+        if: always() && matrix.node-version == 22 && env.SLACK_WEBHOOK != ''
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
@@ -63,4 +62,4 @@ jobs:
               "text": "CI ${{ job.status }} sur ${{ github.ref }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK }}
