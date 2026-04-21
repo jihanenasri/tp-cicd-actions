@@ -5,7 +5,7 @@ describe('add', () => {
     expect(add(2, 3)).toBe(5);
   });
 
-  test('additionne avec un nombre negatif', () => {
+  test('additionne avec un nombre négatif', () => {
     expect(add(-1, 5)).toBe(4);
   });
 });
@@ -29,8 +29,8 @@ describe('factorial', () => {
     expect(factorial(0)).toBe(1);
   });
 
-  test('erreur si negatif', () => {
-    expect(() => factorial(-1)).toThrow('Nombre negatif');
+  test('erreur si négatif', () => {
+    expect(() => factorial(-1)).toThrow('Nombre négatif');
   });
 });
 
