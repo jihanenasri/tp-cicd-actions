@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ main ]
   workflow_call:
+  schedule:
+    - cron: '0 2 * * *' # Tous les jours à 02h00 UTC
 
 jobs:
   lint-and-test:
