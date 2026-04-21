@@ -33,3 +33,8 @@ describe('factorial', () => {
     expect(() => factorial(-1)).toThrow('Nombre négatif');
   });
 });
+const { subtract } = require('../src/math');
+
+test('subtract 5 - 2 equals 3', () => {
+  expect(subtract(5, 2)).toBe(3);
+});
